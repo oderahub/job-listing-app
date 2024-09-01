@@ -1,16 +1,15 @@
 <script setup>
-
-  import { reactive, onMounted} from 'vue';
+  import { reactive, onMounted } from 'vue';
     import axios from 'axios';
     import { useRouter, useRoute } from 'vue-router';
     import { useToast } from 'vue-toastification';
 
 
   const form = reactive({
-    type: 'Full-Time',
+    type: 'Remote',
     title: '',
     description: '',
-    salary: '$50K - $60K',
+    salary: 'Under $50K',
     location: '',
     company: {
         name: '',
@@ -22,18 +21,18 @@
 
     const router = useRouter();
     const toast = useToast();
-    const route = useRoute();
+    const route = useRoute()
+  
+  const jobId = route.params.id
 
-    const jobId = route.params.id
-
-    const state = reactive({
-        job: {},
-        isLoading: true
-    })
+  const state = reactive({
+    job: {},
+    isLoading: true
+  })
   
   const handleSubmit = async ()=> {
 
-    const newjob = {
+    const Updatedjob = {
         type: form.type,
         title: form.title,
         description: form.description,
@@ -47,30 +46,41 @@
         }
     }
       try{
-        const response = await axios.post('/api/jobs', newjob)
-        toast.success('Job added successfully')
+        const response = await axios.put(`/api/jobs/${jobId}`, Updatedjob)
+        toast.success('Job Updated successfully')
         router.push(`/jobs/${response.data.id}`)
       } catch (error) {
-        console.error('Error adding job', error)
-        toast.error('Error adding job')
+        console.error('Error Updatin job', error)
+        toast.error('Error Updating job')
   }
   }
 
   onMounted(async ()=>{
     try {
-        const response = await axios.get(`/api/jobs/${jobId}`)
-         console.log('API response:', jobId)
-        state.job = response.data
+      const response = await axios.get(`/api/jobs/${jobId}`)
+      state.job = response.data
+      //populate the form with the job data
+      form.type = state.job.type
+      form.title = state.job.title
+      form.description = state.job.description
+      form.salary = state.job.salary
+      form.location = state.job.location
+      form.company.name = state.job.company.name
+      form.company.description = state.job.company.description
+      form.company.contactEmail = state.job.company.contactEmail
+      form.company.contactPhone = state.job.company.contactPhone
+
     } catch (error) {
-        console.log('Error fetching job', error)
-    }finally {
-        state.isLoading = false
+      console.error('Error fetching job', error)
+
+    }finally{
+      state.isLoading = false
     }
-})
+  })
 </script>
 
 <template>
-    <section class="bg-green-50">
+    <section  class="bg-green-50">
       <div class="container m-auto max-w-2xl py-24">
         <div
           class="bg-white px-6 py-8 mb-4 shadow-md rounded-md border m-4 md:m-0"

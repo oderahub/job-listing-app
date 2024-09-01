@@ -3,7 +3,7 @@ import pulseLoader from 'vue-spinner/src/PulseLoader.vue'
 import {ref, onMounted } from 'vue'
 import BackButton from '@/components/BackButton.vue'
 import { useRoute, RouterLink, useRouter } from 'vue-router'
-import Toast, { useToast } from 'vue-toastification'
+import { useToast } from 'vue-toastification'
 import axios from 'axios'
 
 const route  = useRoute()
@@ -111,7 +111,7 @@ const deleteJob = async ()=>{
             <div class="bg-white p-6 rounded-lg shadow-md mt-6">
               <h3 class="text-xl font-bold mb-6">Manage Job</h3>
               <RouterLink
-                :to="`/jobs/edit/{{ state.job.id }}`"
+                :to="`/jobs/edit/${ state.job.id }`"
                 class="bg-green-500 hover:bg-green-600 text-white text-center font-bold py-2 px-4 rounded-full w-full focus:outline-none focus:shadow-outline mt-4 block"
                 >Edit Job</RouterLink
               >
