@@ -14,6 +14,7 @@ const router = useRouter()
 
 const jobId = route.params.id
 
+
 const state = ref({
   job: {},
   isLoading: true
